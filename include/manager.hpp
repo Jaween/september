@@ -11,7 +11,7 @@ class Manager
   void start();
 
  private:
-  Algorithm m_algorithm;
+  Algorithm algorithm_;
 };
 
 #endif // MANAGER_HPP
