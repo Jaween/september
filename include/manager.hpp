@@ -14,7 +14,9 @@ class Manager {
 
  private:
   Algorithm algorithm_;
-  Image* image_;
+  Image* current_frame_;
+  Image* previous_frame_;
+  Image* screen_;
   WindowManager* window_manager_;
 };
 
