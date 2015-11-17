@@ -1,7 +1,7 @@
 # Compiler and linking
 LIBS = -lSDL2 -lSDL2_image -lOpenCL
 FLAGS = -I $(DEPDIR) -std=c++11 # -fsanitize=address
-CXX = g++
+CXX = clang++
 
 # Binary executable output
 TARGETDIR = bin
@@ -9,7 +9,7 @@ TARGET = september
 
 # Source files
 SRCDIR = src
-SRCNAMES = main.cc algorithm.cc manager.cc util.cc
+SRCNAMES = main.cc algorithm.cc manager.cc util.cc graphics_factory.cc graphics_factory_sdl.cc image.cc image_sdl.cc window.cc window_manager.cc window_manager_sdl.cc window_sdl.cc
 
 # Header files
 DEPDIR = include
