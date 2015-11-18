@@ -1,14 +1,14 @@
 
 #include <stdlib.h>
 
-#include "graphics_factory_sdl.hpp"
+#include "media_factory_sdl.hpp"
 #include "manager.hpp"
 
 int main(int argc, char* argv[]) {
 
-  GraphicsFactorySdl graphics_factory_sdl = GraphicsFactorySdl();
+  MediaFactorySdl media_factory_sdl = MediaFactorySdl();
 
-  Manager manager = Manager(graphics_factory_sdl);
+  Manager manager = Manager(media_factory_sdl);
   manager.start();
 
   return EXIT_SUCCESS;

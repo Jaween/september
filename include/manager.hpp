@@ -2,13 +2,13 @@
 #define MANAGER_HPP
 
 #include "algorithm.hpp"
-#include "graphics_factory.hpp"
+#include "media_factory.hpp"
 #include "image.hpp"
 #include "window_manager.hpp"
 
 class Manager {
  public:
-  Manager(GraphicsFactory& graphics_factory);
+  Manager(MediaFactory& media_factory);
   ~Manager();
   void start();
   void loadImage(int frame);

@@ -4,25 +4,30 @@
 #include "manager.hpp"
 #include "window_manager.hpp"
 
-Manager::Manager(GraphicsFactory& graphics_factory) {
+Manager::Manager(MediaFactory& media_factory) {
   algorithm_.initialise();
 
   // Creates two blank images, one for the video frame the other for display
-  current_frame_ = graphics_factory.createImage(540, 300, 1);
-  screen_ = graphics_factory.createImage(540, 300, 1);
+  current_frame_ = media_factory.createImage(540, 300, 1);
+  screen_ = media_factory.createImage(540, 300, 1);
 
   // Creates the output window
-  window_manager_ = graphics_factory.createWindowManager();
+  window_manager_ = media_factory.createWindowManager();
   window_manager_->createWindow(screen_, Window::PixelFormat::ABGR, 
                                 "Earth, Wind and Fire");
+
+  // Background music
+  bool loop = true;
+  media_factory.playAudio("res/september.ogg", loop);
 }
 
 Manager::~Manager() {
 } 
 
 void Manager::start() {
+  // Loads the frames and computes the output
   int frames_per_loop = 20;
-  for (int frame = 0; frame < 160; frame++) {
+  for (int frame = 0; frame < 200; frame++) {
     // Loads a new video frame
     std::cout << "Frame " << frame << std::endl;
     std::stringstream stringstream;
