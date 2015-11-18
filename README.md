@@ -1,6 +1,11 @@
 September
 =========
-Earth, Wind and Fire
+Uses OpenCL to remove the background colour from an set of images and [animates](https://youtu.be/Gs069dndIYk)
+the playback. The image frames must be ABGR PNGs.
+
+Requires: 
+ * OpenCL
+ * SDL 2
 
 License
 =====
