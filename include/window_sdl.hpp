@@ -14,9 +14,9 @@ class WindowSdl : public Window {
 
  private:
   void createWindow(unsigned int width, unsigned int height, const PixelFormat& pixel_format, std::string title);
-  SDL_Window* m_window = NULL;
-  SDL_Texture* m_texture = NULL;
-  SDL_Renderer* m_renderer = NULL;
+  SDL_Window* window_ = NULL;
+  SDL_Texture* texture_ = NULL;
+  SDL_Renderer* renderer_ = NULL;
 };
 
 #endif // WINDOW_SDL_HPP

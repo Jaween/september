@@ -14,11 +14,11 @@ ImageSdl::ImageSdl(unsigned int width, unsigned int height, unsigned int words_p
   unsigned int g_mask = 0x0000FF00;
   unsigned int b_mask = 0x00FF0000;
   unsigned int a_mask = 0xFF000000;
-  m_surface = SDL_CreateRGBSurface(flag, width, height, depth, r_mask, g_mask, b_mask, a_mask);
+  surface_ = SDL_CreateRGBSurface(flag, width, height, depth, r_mask, g_mask, b_mask, a_mask);
 
-  m_width = m_surface->w;
-  m_height = m_surface->h;
-  m_words_per_pixel = 1;
+  width_ = surface_->w;
+  height_ = surface_->h;
+  words_per_pixel_ = 1;
 }
 
 ImageSdl::ImageSdl(std::string filename) {
@@ -26,33 +26,33 @@ ImageSdl::ImageSdl(std::string filename) {
 }
 
 ImageSdl::~ImageSdl() {
-  SDL_FreeSurface(m_surface);
+  SDL_FreeSurface(surface_);
 }
 
 uint32_t* ImageSdl::getPixels() {
-  return (uint32_t*) m_surface->pixels;
+  return (uint32_t*) surface_->pixels;
 }
 
 SDL_Surface* ImageSdl::getSurface() {
-  return m_surface;
+  return surface_;
 }
 
 void ImageSdl::load(std::string filename) {
   // Frees any existing image
-  if (m_surface != NULL) {
-    SDL_FreeSurface(m_surface);
+  if (surface_ != NULL) {
+    SDL_FreeSurface(surface_);
   }
 
   // Loads in the image
-  m_surface = IMG_Load(filename.c_str());
-  if (m_surface == NULL) {
+  surface_ = IMG_Load(filename.c_str());
+  if (surface_ == NULL) {
     std::cerr << "Failed to load image" << std::endl;
   }
 
   // Saves the dimensions of the image
-  m_width = m_surface->w;
-  m_height = m_surface->h;
-  m_words_per_pixel = 1;
+  width_ = surface_->w;
+  height_ = surface_->h;
+  words_per_pixel_ = 1;
 }
 
 void ImageSdl::save(std::string prefix) {
@@ -62,14 +62,14 @@ void ImageSdl::save(std::string prefix) {
 
   std::string filename = directory + prefix + " " + date_time + extension;
   std::cout << filename << std::endl;
-  SDL_SaveBMP(m_surface, filename.c_str());
+  SDL_SaveBMP(surface_, filename.c_str());
 }
 
 void ImageSdl::fill(unsigned int colour) {
-  for (unsigned int y = 0; y < m_height; y++) {
-    for (unsigned int x = 0; x < m_width; x++) {
-        unsigned int index = y * m_width + x;
-        ((unsigned int*) m_surface->pixels)[index] = colour;
+  for (unsigned int y = 0; y < height_; y++) {
+    for (unsigned int x = 0; x < width_; x++) {
+        unsigned int index = y * width_ + x;
+        ((unsigned int*) surface_->pixels)[index] = colour;
     }
   }
 }
@@ -78,17 +78,17 @@ void ImageSdl::blit(Image* other) {
   SDL_BlitSurface(
       (dynamic_cast<ImageSdl*>(other))->getSurface(),
       NULL,
-      m_surface,
+      surface_,
       NULL
   );
 }
 
 void ImageSdl::grayscale() {
-  unsigned int* pixels = (unsigned int*) m_surface->pixels;
+  unsigned int* pixels = (unsigned int*) surface_->pixels;
 
-  for (unsigned int y = 0; y < m_height; y++) {
-    for (unsigned int x = 0; x < m_width; x++) {
-      unsigned int index = y * m_width + x;
+  for (unsigned int y = 0; y < height_; y++) {
+    for (unsigned int x = 0; x < width_; x++) {
+      unsigned int index = y * width_ + x;
       unsigned int pixel = pixels[index];
 
       unsigned int r = pixel >> 16 & 0xFF;

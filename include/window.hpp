@@ -15,7 +15,7 @@ class Window {
   virtual void refresh() = 0;
 
  protected:
-  Image* m_image = NULL;
+  Image* image_ = NULL;
 };
 
 #endif // WINDOW_HPP

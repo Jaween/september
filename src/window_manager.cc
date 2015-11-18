@@ -1,13 +1,13 @@
 #include "window_manager.hpp"
 
 WindowManager::~WindowManager() {
-  for (Window* window : windows) {
+  for (Window* window : windows_) {
     delete window;
   }
 }
 
 void WindowManager::refresh() {
-  for (int i = 0; i < windows.size(); i++) {
-    windows.at(i)->refresh();
+  for (int i = 0; i < windows_.size(); i++) {
+    windows_.at(i)->refresh();
   }
 }

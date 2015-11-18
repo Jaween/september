@@ -14,7 +14,7 @@ class WindowManager {
   virtual void sleep(long millis) = 0;
 
  protected:
-  std::vector<Window*> windows;
+  std::vector<Window*> windows_;
 };
 
 #endif // WINDOW_MANAGER_HPP

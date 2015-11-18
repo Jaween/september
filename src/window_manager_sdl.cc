@@ -13,7 +13,7 @@ WindowManagerSdl::~WindowManagerSdl() {
 
 Window* WindowManagerSdl::createWindow(Image* image, const Window::PixelFormat& pixel_format, std::string title) {
   Window* window = new WindowSdl(image, pixel_format, title);
-  windows.push_back(window);
+  windows_.push_back(window);
   return window;
 }
 

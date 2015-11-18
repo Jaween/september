@@ -9,13 +9,13 @@ Image::Image(unsigned int width, unsigned int height, unsigned int words_per_pix
 }
 
 unsigned int Image::getWidth() {
-  return m_width;
+  return width_;
 }
 
 unsigned int Image::getHeight() {
-  return m_height;
+  return height_;
 }
 
 unsigned int Image::getWordsPerPixel() {
-  return m_words_per_pixel;
+  return words_per_pixel_;
 }

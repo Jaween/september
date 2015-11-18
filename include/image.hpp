@@ -20,9 +20,9 @@ class Image {
   virtual void blit(Image* other) = 0;
 
  protected:
-  unsigned int m_width = 0;
-  unsigned int m_height = 0;
-  unsigned int m_words_per_pixel = 1;
+  unsigned int width_ = 0;
+  unsigned int height_ = 0;
+  unsigned int words_per_pixel_ = 1;
 };
 
 #endif // IMAGE_HPP

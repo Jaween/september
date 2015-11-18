@@ -24,7 +24,7 @@ class ImageSdl : public Image {
   void grayscale();
   std::string getDateTime();
 
-  SDL_Surface* m_surface = NULL;
+  SDL_Surface* surface_ = NULL;
 };
 
 #endif // IMAGE_SDL_HPP

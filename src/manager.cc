@@ -7,9 +7,11 @@
 Manager::Manager(GraphicsFactory& graphics_factory) {
   algorithm_.initialise();
 
+  // Creates two blank images, one for the video frame the other for display
   current_frame_ = graphics_factory.createImage(540, 300, 1);
   screen_ = graphics_factory.createImage(540, 300, 1);
 
+  // Creates the output window
   window_manager_ = graphics_factory.createWindowManager();
   window_manager_->createWindow(screen_, Window::PixelFormat::ABGR, 
                                 "Earth, Wind and Fire");
