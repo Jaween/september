@@ -18,15 +18,16 @@ Manager::Manager(GraphicsFactory& graphics_factory) {
 }
 
 Manager::~Manager() {
-}
+} 
 
 void Manager::start() {
-  for (int frame = 0; frame < 80; frame++) {
+  int frames_per_loop = 20;
+  for (int frame = 0; frame < 160; frame++) {
     // Loads a new video frame
     std::cout << "Frame " << frame << std::endl;
     std::stringstream stringstream;
     stringstream << "res/frame_";
-    stringstream << (frame % 8);
+    stringstream << (frame % frames_per_loop);
     stringstream << ".png";
     current_frame_->load(stringstream.str());
 
