@@ -18,6 +18,7 @@ class ImageSdl : public Image {
   virtual void load(std::string filename);
   virtual void save(std::string prefix);
   virtual void fill(unsigned int colour);
+  virtual void blit(Image* other);
 
  private:
   void grayscale();

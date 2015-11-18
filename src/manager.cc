@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "manager.hpp"
 #include "window_manager.hpp"
@@ -6,24 +7,34 @@
 Manager::Manager(GraphicsFactory& graphics_factory) {
   algorithm_.initialise();
 
-  current_frame_ = graphics_factory.createImage(640, 480, 1);
-
-  previous_frame_ = graphics_factory.createImage(640, 480, 1);
-
-  screen_ = graphics_factory.createImage(640, 480, 1);
+  current_frame_ = graphics_factory.createImage(540, 300, 1);
+  screen_ = graphics_factory.createImage(540, 300, 1);
 
   window_manager_ = graphics_factory.createWindowManager();
-  window_manager_->createWindow(screen_, Window::PixelFormat::ABGR, "Earth, Wind and Fire");
+  window_manager_->createWindow(screen_, Window::PixelFormat::ABGR, 
+                                "Earth, Wind and Fire");
 }
 
 Manager::~Manager() {
 }
 
 void Manager::start() {
-  algorithm_.execute(current_frame_, previous_frame_, screen_);
+  for (int frame = 0; frame < 80; frame++) {
+    // Loads a new video frame
+    std::cout << "Frame " << frame << std::endl;
+    std::stringstream stringstream;
+    stringstream << "res/frame_";
+    stringstream << (frame % 8);
+    stringstream << ".png";
+    current_frame_->load(stringstream.str());
 
-  window_manager_->refresh();
-
-  long sleep_millis = 1000;
-  window_manager_->sleep(sleep_millis);
+    // Performs the GPU execution
+    const float shrink_factor = 0.1f; 
+    algorithm_.compute(shrink_factor, current_frame_, screen_);
+    screen_->blit(current_frame_);
+    
+    // Updates the window
+    window_manager_->refresh();
+    window_manager_->sleep(32);
+  }
 }

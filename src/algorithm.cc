@@ -65,45 +65,69 @@ std::string Algorithm::loadSource(std::string filename) {
   return buffer.str();
 }
 
-void Algorithm::execute(Image* current_frame, Image* previous_frame, Image* screen) {
-  // Allocates buffer on the compute device
-  cl::Image2D clImage_current(
+void Algorithm::compute(float shrink_factor, Image* current_frame, Image* screen) {
+  shink_image(shrink_factor, screen);
+  background_removal(current_frame);
+}
+
+void Algorithm::shink_image(float factor, Image* image) {
+  // Allocates buffers on the compute device
+  cl::Image2D cl_image_source(
       context_,
       CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-      cl::ImageFormat(CL_RGBA, CL_UNSIGNED_INT8),
-      current_frame->getWidth(),
-      current_frame->getHeight(),
+      cl::ImageFormat(CL_R, CL_UNSIGNED_INT32),
+      image->getWidth(),
+      image->getHeight(),
       0,
-      (void*) current_frame->getPixels()
+      (void*) image->getPixels()
   );
 
-  cl::Image2D clImage_previous(
-      context_,
-      CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
-      cl::ImageFormat(CL_RGBA, CL_UNSIGNED_INT8),
-      previous_frame->getWidth(),
-      previous_frame->getHeight(),
-      0,
-      (void*) previous_frame->getPixels()
-  );
-
-  cl::Image2D clImage_screen(
+  cl::Image2D cl_image_destination(
       context_,
       CL_MEM_WRITE_ONLY,
       cl::ImageFormat(CL_R, CL_UNSIGNED_INT32),
-      screen->getWidth(),
-      screen->getHeight()
+      image->getWidth(),
+      image->getHeight()
   );
 
-  cl::Kernel kernel(program_, "execute");
-  kernel.setArg(0, clImage_current);
-  kernel.setArg(1, clImage_previous);
-  kernel.setArg(2, clImage_screen);
+  // Retrieves and sets up the compute kernel
+  cl::Kernel kernel(program_, "shrink_image");
+  kernel.setArg(0, factor);
+  kernel.setArg(1, cl_image_source);
+  kernel.setArg(2, cl_image_destination);
 
-  executeImageKernel(kernel, clImage_screen, screen);
+  executeImageKernel(kernel, cl_image_destination, image);
 }
 
-inline void Algorithm::executeImageKernel(cl::Kernel& kernel, cl::Image2D& out_buffer, Image* out_image) {
+void Algorithm::background_removal(Image* image) {
+  // Allocates buffers on the compute device
+  cl::Image2D cl_image_source(
+      context_,
+      CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+      cl::ImageFormat(CL_R, CL_UNSIGNED_INT32),
+      image->getWidth(),
+      image->getHeight(),
+      0,
+      (void*) image->getPixels()
+  );
+
+  cl::Image2D cl_image_destination(
+      context_,
+      CL_MEM_WRITE_ONLY,
+      cl::ImageFormat(CL_R, CL_UNSIGNED_INT32),
+      image->getWidth(),
+      image->getHeight()
+  );
+
+  // Retrieves and sets up the compute kernel  
+  cl::Kernel kernel(program_, "background_removal");
+  kernel.setArg(0, cl_image_source);
+  kernel.setArg(1, cl_image_destination);
+
+  executeImageKernel(kernel, cl_image_destination, image);
+}
+
+inline void Algorithm::executeImageKernel(cl::Kernel& kernel, cl::Image2D& cl_image_destination, Image* out_image) {
   cl_int result = command_queue_.enqueueNDRangeKernel(
       kernel,
       cl::NullRange,
@@ -127,5 +151,5 @@ inline void Algorithm::executeImageKernel(cl::Kernel& kernel, cl::Image2D& out_b
 
   uint32_t* pixel_data = out_image->getPixels();
 
-  command_queue_.enqueueReadImage(out_buffer, CL_TRUE, origin, region, 0, 0, pixel_data, NULL, NULL);
+  command_queue_.enqueueReadImage(cl_image_destination, CL_TRUE, origin, region, 0, 0, pixel_data, NULL, NULL);
 }

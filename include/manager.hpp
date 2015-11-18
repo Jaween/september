@@ -11,11 +11,11 @@ class Manager {
   Manager(GraphicsFactory& graphics_factory);
   ~Manager();
   void start();
+  void loadImage(int frame);
 
  private:
   Algorithm algorithm_;
   Image* current_frame_;
-  Image* previous_frame_;
   Image* screen_;
   WindowManager* window_manager_;
 };

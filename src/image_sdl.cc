@@ -8,12 +8,11 @@
 #include "image_sdl.hpp"
 
 ImageSdl::ImageSdl(unsigned int width, unsigned int height, unsigned int words_per_pixel) {
-  m_words_per_pixel = 1;
   unsigned int flag = 0;
   unsigned int depth = 32;
-  unsigned int r_mask = 0x00FF0000;
+  unsigned int r_mask = 0x000000FF;
   unsigned int g_mask = 0x0000FF00;
-  unsigned int b_mask = 0x000000FF;
+  unsigned int b_mask = 0x00FF0000;
   unsigned int a_mask = 0xFF000000;
   m_surface = SDL_CreateRGBSurface(flag, width, height, depth, r_mask, g_mask, b_mask, a_mask);
 
@@ -73,6 +72,15 @@ void ImageSdl::fill(unsigned int colour) {
         ((unsigned int*) m_surface->pixels)[index] = colour;
     }
   }
+}
+
+void ImageSdl::blit(Image* other) {
+  SDL_BlitSurface(
+      (dynamic_cast<ImageSdl*>(other))->getSurface(),
+      NULL,
+      m_surface,
+      NULL
+  );
 }
 
 void ImageSdl::grayscale() {
